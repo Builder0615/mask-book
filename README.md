@@ -31,6 +31,6 @@ MOBI、AZW 等需要专用二进制解码的格式暂未纳入当前版本。
 - `Ctrl/Cmd + ↓`：下一行。
 - `Ctrl/Cmd + ←`：上一章。
 - `Ctrl/Cmd + →`：下一章。
-- `Ctrl + M`：显示或隐藏 Status Bar 阅读行。
+- `Ctrl + M`（macOS：`Command + M`）：显示或隐藏 Status Bar 阅读行。
 
 Status Bar 没有固定宽度，因此超长行会按 `consoleReader.statusBarMaxLength` 截断并显示省略号，默认最多显示 72 个字符。TXT 编码可以在设置中调整：`consoleReader.textEncoding`，默认值为 `auto`；如果中文 TXT 显示乱码，可以手动选择 `gb18030`。
