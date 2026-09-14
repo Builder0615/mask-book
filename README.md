@@ -25,6 +25,8 @@ MOBI、AZW 等需要专用二进制解码的格式暂未纳入当前版本。
 
 发布新版本时，推送一个与 `package.json` 版本对应的标签（例如 `v0.1.0`），GitHub Actions 会自动运行测试、构建 VSIX 并创建 GitHub Release。
 
+如果在 GitHub 仓库中配置名为 `VSCE_PAT` 的 Actions Secret，推送版本标签或手动运行 `Publish to VS Code Marketplace` workflow 时还会自动发布到 VS Code 插件市场。
+
 快捷键：
 
 - `Ctrl/Cmd + ↑`：上一行。
