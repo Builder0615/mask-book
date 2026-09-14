@@ -2,9 +2,6 @@ name: Publish to VS Code Marketplace
 
 on:
   workflow_dispatch:
-  push:
-    tags:
-      - 'v*'
 
 permissions:
   contents: read
@@ -29,17 +26,6 @@ jobs:
 
       - name: Run tests
         run: npm test
-
-      - name: Check release tag
-        if: github.event_name == 'push'
-        env:
-          RELEASE_TAG: ${{ github.ref_name }}
-        run: |
-          EXPECTED_TAG="v$(node -p "require('./package.json').version")"
-          if [ "$RELEASE_TAG" != "$EXPECTED_TAG" ]; then
-            echo "Tag $RELEASE_TAG does not match package version $EXPECTED_TAG"
-            exit 1
-          fi
 
       - name: Publish extension
         if: env.VSCE_PAT != ''

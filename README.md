@@ -23,9 +23,9 @@ MOBI、AZW 等需要专用二进制解码的格式暂未纳入当前版本。
 4. 点击章节目录会切换到该章节第一行。
 5. 当前章节的当前行只在打开书籍后显示于 VS Code 底部 Status Bar；状态栏按钮和快捷键负责显示/隐藏。
 
-发布新版本时，推送一个与 `package.json` 版本对应的标签（例如 `v0.1.0`），GitHub Actions 会自动运行测试、构建 VSIX 并创建 GitHub Release。
+只有明确需要打包或发布时，才在 GitHub Actions 中手动运行 `Build and Release` workflow，并输入与 `package.json` 版本一致的标签（例如 `v0.1.4`）。普通提交和推送不会触发构建或创建 Release。
 
-如果在 GitHub 仓库中配置名为 `VSCE_PAT` 的 Actions Secret，推送版本标签或手动运行 `Publish to VS Code Marketplace` workflow 时还会自动发布到 VS Code 插件市场；不配置 PAT 时，也可以直接在 Marketplace Publisher 管理页上传 VSIX。
+如果在 GitHub 仓库中配置名为 `VSCE_PAT` 的 Actions Secret，手动运行 `Publish to VS Code Marketplace` workflow 时会自动发布到 VS Code 插件市场；不配置 PAT 时，也可以直接在 Marketplace Publisher 管理页上传 VSIX。该 workflow 也不会被普通提交或标签自动触发。
 
 快捷键：
 
