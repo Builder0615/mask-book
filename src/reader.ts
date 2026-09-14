@@ -2,6 +2,7 @@ import * as path from 'node:path';
 import { promises as fs } from 'node:fs';
 import * as vscode from 'vscode';
 import { BookShelfProvider } from './bookshelf';
+import { getReadableLines } from './line-utils';
 import { parseBook } from './parsers';
 import { Book, Chapter, SUPPORTED_EXTENSIONS, TextEncoding } from './types';
 
@@ -141,9 +142,7 @@ export class ReaderController implements vscode.Disposable {
       this.book = book;
       const position = this.restorePosition(book);
       this.currentChapterIndex = position.chapter;
-      this.currentLine = position.line;
-      this.totalLines = Math.max(1, book.chapters[this.currentChapterIndex]?.content.split('\n').length ?? 1);
-      this.currentLine = Math.min(this.currentLine, this.totalLines - 1);
+      this.setCurrentLine(position.line);
       this.chapterTree.setChapters(book.chapters);
       this.lineHidden = !showLine;
       await this.rememberBook(absolutePath);
@@ -172,8 +171,7 @@ export class ReaderController implements vscode.Disposable {
       return;
     }
     this.currentChapterIndex = index;
-    this.currentLine = 0;
-    this.totalLines = Math.max(1, this.book.chapters[index].content.split('\n').length);
+    this.setCurrentLine(0, this.book.chapters[index]);
     this.lineHidden = false;
     this.scheduleSavePosition();
     this.updateStatusBar();
@@ -184,9 +182,24 @@ export class ReaderController implements vscode.Disposable {
       return;
     }
     const chapter = this.book.chapters[this.currentChapterIndex];
-    const lineCount = Math.max(1, chapter?.content.split('\n').length ?? 1);
-    this.currentLine = Math.max(0, Math.min(lineCount - 1, this.currentLine + delta));
-    this.totalLines = lineCount;
+    const readableLines = getReadableLines(chapter?.content ?? '');
+    this.totalLines = readableLines.length;
+    if (readableLines.length === 0) {
+      this.currentLine = 0;
+      this.scheduleSavePosition();
+      this.updateStatusBar();
+      return;
+    }
+
+    let currentPosition = readableLines.findIndex(line => line.rawIndex === this.currentLine);
+    if (currentPosition < 0) {
+      currentPosition = readableLines.findIndex(line => line.rawIndex >= this.currentLine);
+      if (currentPosition < 0) {
+        currentPosition = readableLines.length - 1;
+      }
+    }
+    const nextPosition = Math.max(0, Math.min(readableLines.length - 1, currentPosition + delta));
+    this.currentLine = readableLines[nextPosition].rawIndex;
     this.scheduleSavePosition();
     this.updateStatusBar();
   }
@@ -292,6 +305,18 @@ export class ReaderController implements vscode.Disposable {
     }
   }
 
+  private setCurrentLine(preferredLine: number, chapter = this.book?.chapters[this.currentChapterIndex]): void {
+    const readableLines = getReadableLines(chapter?.content ?? '');
+    this.totalLines = readableLines.length;
+    if (readableLines.length === 0) {
+      this.currentLine = 0;
+      return;
+    }
+
+    const line = readableLines.find(item => item.rawIndex >= preferredLine) ?? readableLines[readableLines.length - 1];
+    this.currentLine = line.rawIndex;
+  }
+
   private async rememberBook(filePath: string): Promise<void> {
     await this.rememberBooks([filePath]);
   }
@@ -375,12 +400,15 @@ export class ReaderController implements vscode.Disposable {
     const current = this.book.chapters.length > 0 ? this.currentChapterIndex + 1 : 0;
     const state = this.lineHidden ? '显示阅读行' : '隐藏阅读行';
     const chapter = this.book.chapters[this.currentChapterIndex];
-    const currentLineText = chapter?.content.split('\n')[this.currentLine]?.trim() || '';
+    const readableLines = getReadableLines(chapter?.content ?? '');
+    this.totalLines = readableLines.length;
+    const currentLinePosition = readableLines.findIndex(line => line.rawIndex === this.currentLine);
+    const currentLineText = currentLinePosition >= 0 ? readableLines[currentLinePosition].text : '';
     const maxLength = Math.max(20, Math.min(160, vscode.workspace.getConfiguration('consoleReader').get<number>('statusBarMaxLength', 72)));
-    const readableLine = currentLineText || '（空行）';
-    const line = readableLine.length > maxLength ? `${readableLine.slice(0, maxLength)}…` : readableLine;
-    this.contentStatusBarItem.text = `$(book) ${line}`;
-    this.contentStatusBarItem.tooltip = `《${this.book.title}》\n第 ${current}/${this.book.chapters.length} 章 · 行 ${this.currentLine + 1}/${this.totalLines}\nCtrl/Cmd + ↑/↓ 翻行 · Ctrl/Cmd + ←/→ 切换章节`;
+    const line = currentLineText.length > maxLength ? `${currentLineText.slice(0, maxLength)}…` : currentLineText;
+    this.contentStatusBarItem.text = line ? `$(book) ${line}` : '$(book)';
+    const displayedLine = currentLinePosition >= 0 ? currentLinePosition + 1 : 0;
+    this.contentStatusBarItem.tooltip = `《${this.book.title}》\n第 ${current}/${this.book.chapters.length} 章 · 行 ${displayedLine}/${this.totalLines}\nCtrl/Cmd + ↑/↓ 翻行 · Ctrl/Cmd + ←/→ 切换章节`;
     if (this.lineHidden) {
       this.contentStatusBarItem.hide();
     } else {

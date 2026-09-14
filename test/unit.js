@@ -5,6 +5,7 @@ const path = require('node:path');
 const JSZip = require('jszip');
 
 const { parseBook } = require('../dist/parsers');
+const { getReadableLines } = require('../dist/line-utils');
 const { splitTextIntoChapters } = require('../dist/parsers/text');
 
 async function writeEpub(directory) {
@@ -50,6 +51,11 @@ async function main() {
 
   const chapters = splitTextIntoChapters('Chapter 1\nHello\n\nChapter 2\nWorld', 'Book');
   assert.equal(chapters.length, 2);
+
+  assert.deepEqual(getReadableLines('\n第一行\n\n  \n第二行\n'), [
+    { rawIndex: 1, text: '第一行' },
+    { rawIndex: 4, text: '第二行' }
+  ]);
 
   const epubPath = await writeEpub(directory);
   const epubBook = await parseBook(epubPath);
