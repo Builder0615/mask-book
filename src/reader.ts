@@ -158,7 +158,7 @@ export class ReaderController implements vscode.Disposable {
         return;
       }
       const message = error instanceof Error ? error.message : String(error);
-      vscode.window.showErrorMessage(`mask-book 打开失败：${message}`);
+      vscode.window.showErrorMessage(`mask-reader 打开失败：${message}`);
     }
   }
 
