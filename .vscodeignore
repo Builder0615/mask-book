@@ -1,0 +1,10 @@
+.vscode/
+.github/
+src/
+test/
+tsconfig.json
+*.ts
+*.map
+*.vsix
+README.md
+node_modules/.cache/

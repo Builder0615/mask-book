@@ -1,0 +1,240 @@
+{
+  "name": "mask-book",
+  "displayName": "mask-book",
+  "description": "在 VS Code 底部状态栏隐蔽地逐行阅读 TXT、EPUB、FB2、PDF、HTML、Markdown 等常见书籍格式。",
+  "version": "0.1.0",
+  "publisher": "mask-book-dev",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Builder0615/mask-book.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Builder0615/mask-book/issues"
+  },
+  "homepage": "https://github.com/Builder0615/mask-book#readme",
+  "icon": "resources/marketplace-icon.png",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "reader",
+    "epub",
+    "txt",
+    "book",
+    "novel",
+    "fb2",
+    "pdf",
+    "docx",
+    "statusbar"
+  ],
+  "main": "./dist/extension.js",
+  "activationEvents": [
+    "onStartupFinished",
+    "onView:consoleReader.chapters",
+    "onView:consoleReader.bookshelf",
+    "onCommand:consoleReader.addBook",
+    "onCommand:consoleReader.removeFromShelf",
+    "onCommand:consoleReader.toggleLine",
+    "onCommand:consoleReader.moveLineUp",
+    "onCommand:consoleReader.moveLineDown",
+    "onCommand:consoleReader.nextChapter",
+    "onCommand:consoleReader.previousChapter",
+    "onCommand:consoleReader.closeBook"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "consoleReader.addBook",
+        "title": "添加书籍",
+        "category": "mask-book",
+        "icon": "$(add)"
+      },
+      {
+        "command": "consoleReader.removeFromShelf",
+        "title": "从书架移除",
+        "category": "mask-book",
+        "icon": "$(trash)"
+      },
+      {
+        "command": "consoleReader.toggleLine",
+        "title": "mask-book: 显示/隐藏状态栏阅读行",
+        "category": "mask-book"
+      },
+      {
+        "command": "consoleReader.moveLineUp",
+        "title": "mask-book: 向上翻行",
+        "category": "mask-book"
+      },
+      {
+        "command": "consoleReader.moveLineDown",
+        "title": "mask-book: 向下翻行",
+        "category": "mask-book"
+      },
+      {
+        "command": "consoleReader.nextChapter",
+        "title": "mask-book: 下一章",
+        "category": "mask-book"
+      },
+      {
+        "command": "consoleReader.previousChapter",
+        "title": "mask-book: 上一章",
+        "category": "mask-book"
+      },
+      {
+        "command": "consoleReader.closeBook",
+        "title": "mask-book: 关闭当前书籍",
+        "category": "mask-book"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "consoleReader",
+          "title": "mask-book",
+          "icon": "resources/book.svg"
+        }
+      ]
+    },
+    "views": {
+      "consoleReader": [
+        {
+          "id": "consoleReader.bookshelf",
+          "name": "书架",
+          "icon": "resources/book.svg",
+          "contextualTitle": "mask-book 书架"
+        },
+        {
+          "id": "consoleReader.chapters",
+          "name": "章节目录",
+          "icon": "resources/book.svg",
+          "contextualTitle": "mask-book 章节目录"
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "consoleReader.bookshelf",
+        "contents": "书架为空。\n\n点击标题栏右侧的添加按钮选择书籍或目录。"
+      },
+      {
+        "view": "consoleReader.chapters",
+        "contents": "当前没有打开书籍。\n\n请先在书架标题栏点击添加按钮选择书籍或目录。\n\n支持 EPUB、FB2、PDF、DOCX、ODT、TXT、Markdown、HTML、XML、RTF、SRT、VTT、ASS、SSA 等格式。"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "consoleReader.addBook",
+          "when": "view == consoleReader.bookshelf",
+          "group": "navigation@1"
+        },
+        {
+          "command": "consoleReader.closeBook",
+          "when": "(view == consoleReader.bookshelf || view == consoleReader.chapters) && consoleReader.hasBook",
+          "group": "navigation@2"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "consoleReader.removeFromShelf",
+          "when": "view == consoleReader.bookshelf && viewItem == consoleReader.book",
+          "group": "inline"
+        }
+      ]
+    },
+    "keybindings": [
+      {
+        "command": "consoleReader.toggleLine",
+        "key": "ctrl+h",
+        "mac": "cmd+h",
+        "when": "consoleReader.hasBook"
+      },
+      {
+        "command": "consoleReader.previousChapter",
+        "key": "ctrl+left",
+        "mac": "cmd+left",
+        "when": "consoleReader.hasBook"
+      },
+      {
+        "command": "consoleReader.nextChapter",
+        "key": "ctrl+right",
+        "mac": "cmd+right",
+        "when": "consoleReader.hasBook"
+      },
+      {
+        "command": "consoleReader.moveLineUp",
+        "key": "ctrl+up",
+        "mac": "cmd+up",
+        "when": "consoleReader.hasBook"
+      },
+      {
+        "command": "consoleReader.moveLineDown",
+        "key": "ctrl+down",
+        "mac": "cmd+down",
+        "when": "consoleReader.hasBook"
+      }
+    ],
+    "configuration": {
+      "title": "mask-book",
+      "properties": {
+        "consoleReader.textEncoding": {
+          "type": "string",
+          "enum": [
+            "auto",
+            "utf-8",
+            "gb18030",
+            "utf-16le",
+            "utf-16be"
+          ],
+          "enumDescriptions": [
+            "根据 BOM 和文本特征自动判断，适合大多数文件。",
+            "UTF-8。",
+            "GB18030 / GBK，适合部分中文 TXT。",
+            "UTF-16 Little Endian。",
+            "UTF-16 Big Endian。"
+          ],
+          "default": "auto",
+          "description": "TXT、Markdown 等文本文件的读取编码。"
+        },
+        "consoleReader.maxRecentBooks": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 30,
+          "default": 12,
+          "description": "保存的最近书籍数量，用于快速切换书籍。"
+        },
+        "consoleReader.statusBarMaxLength": {
+          "type": "integer",
+          "minimum": 20,
+          "maximum": 160,
+          "default": 72,
+          "description": "状态栏单行正文的最大显示字符数。状态栏没有固定宽度，超出部分会显示省略号。"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "compile": "tsc -p ./tsconfig.json",
+    "watch": "tsc -watch -p ./tsconfig.json",
+    "test:unit": "npm run compile && node ./test/unit.js",
+    "test": "npm run test:unit",
+    "package": "npm run compile && vsce package"
+  },
+  "dependencies": {
+    "@xmldom/xmldom": "^0.9.12",
+    "iconv-lite": "^0.6.3",
+    "jszip": "^3.10.2",
+    "pdf-parse": "1.1.1"
+  },
+  "devDependencies": {
+    "@types/iconv-lite": "^0.0.1",
+    "@types/node": "^20.17.0",
+    "@types/vscode": "1.85.0",
+    "@vscode/vsce": "^3.7.1",
+    "typescript": "^5.7.2"
+  }
+}
