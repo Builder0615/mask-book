@@ -1,7 +1,7 @@
 {
   "name": "mask-book",
   "displayName": "mask-book",
-  "description": "在 VS Code 底部状态栏隐蔽地逐行阅读 TXT、EPUB、FB2、PDF、HTML、Markdown 等常见书籍格式。",
+  "description": "在 VS Code 底部状态栏显示 TXT、EPUB、FB2、PDF、HTML、Markdown 等常见书籍格式的当前阅读内容。",
   "version": "0.1.3",
   "publisher": "mask-book-dev",
   "license": "MIT",

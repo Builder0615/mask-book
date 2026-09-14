@@ -1,6 +1,6 @@
 # mask-book
 
-一个把当前阅读行隐蔽显示在 VS Code 底部 `Status Bar` 中的本地阅读插件。
+一个在 VS Code 底部 `Status Bar` 中显示当前阅读内容的本地阅读插件。
 
 ## 当前支持
 
