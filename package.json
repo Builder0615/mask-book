@@ -2,7 +2,7 @@
   "name": "mask-book",
   "displayName": "mask-book",
   "description": "在 VS Code 底部状态栏隐蔽地逐行阅读 TXT、EPUB、FB2、PDF、HTML、Markdown 等常见书籍格式。",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "publisher": "mask-book-dev",
   "license": "MIT",
   "repository": {
@@ -149,8 +149,8 @@
     "keybindings": [
       {
         "command": "consoleReader.toggleLine",
-        "key": "ctrl+h",
-        "mac": "cmd+h",
+        "key": "ctrl+m",
+        "mac": "ctrl+m",
         "when": "consoleReader.hasBook"
       },
       {

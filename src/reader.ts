@@ -387,7 +387,7 @@ export class ReaderController implements vscode.Disposable {
       this.contentStatusBarItem.show();
     }
     this.controlStatusBarItem.text = this.lineHidden ? '$(eye-closed) 显示阅读行' : '$(eye) 隐藏阅读行';
-    this.controlStatusBarItem.tooltip = `${state}（Ctrl/Cmd + H）`;
+    this.controlStatusBarItem.tooltip = `${state}（Ctrl + M）`;
     this.controlStatusBarItem.show();
   }
 
