@@ -12,6 +12,8 @@ permissions:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    env:
+      VSCE_PAT: ${{ secrets.VSCE_PAT }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -40,11 +42,10 @@ jobs:
           fi
 
       - name: Publish extension
-        env:
-          VSCE_PAT: ${{ secrets.VSCE_PAT }}
+        if: env.VSCE_PAT != ''
         run: |
-          if [ -z "$VSCE_PAT" ]; then
-            echo "Repository secret VSCE_PAT is required"
-            exit 1
-          fi
           npx vsce publish --pat "$VSCE_PAT"
+
+      - name: Skip Marketplace publish without PAT
+        if: env.VSCE_PAT == ''
+        run: echo "VSCE_PAT is not configured; upload the VSIX manually from the Marketplace publisher page."
