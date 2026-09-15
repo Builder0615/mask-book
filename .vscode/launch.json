@@ -2,7 +2,7 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Run mask-reader Extension",
+      "name": "Run mask-read Extension",
       "type": "extensionHost",
       "request": "launch",
       "args": [

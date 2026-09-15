@@ -1,5 +1,5 @@
 {
-  "name": "mask-reader",
+  "name": "mask-read",
   "description": "在 VS Code 底部状态栏显示 TXT、EPUB、FB2、PDF、HTML、Markdown 等常见书籍格式的当前阅读内容。",
   "version": "0.1.3",
   "publisher": "builder0615",
@@ -49,51 +49,51 @@
       {
         "command": "consoleReader.addBook",
         "title": "添加书籍",
-        "category": "mask-reader",
+        "category": "mask-read",
         "icon": "$(add)"
       },
       {
         "command": "consoleReader.removeFromShelf",
         "title": "从书架移除",
-        "category": "mask-reader",
+        "category": "mask-read",
         "icon": "$(trash)"
       },
       {
         "command": "consoleReader.toggleLine",
-        "title": "mask-reader: 显示/隐藏状态栏阅读行",
-        "category": "mask-reader"
+        "title": "mask-read: 显示/隐藏状态栏阅读行",
+        "category": "mask-read"
       },
       {
         "command": "consoleReader.moveLineUp",
-        "title": "mask-reader: 向上翻行",
-        "category": "mask-reader"
+        "title": "mask-read: 向上翻行",
+        "category": "mask-read"
       },
       {
         "command": "consoleReader.moveLineDown",
-        "title": "mask-reader: 向下翻行",
-        "category": "mask-reader"
+        "title": "mask-read: 向下翻行",
+        "category": "mask-read"
       },
       {
         "command": "consoleReader.nextChapter",
-        "title": "mask-reader: 下一章",
-        "category": "mask-reader"
+        "title": "mask-read: 下一章",
+        "category": "mask-read"
       },
       {
         "command": "consoleReader.previousChapter",
-        "title": "mask-reader: 上一章",
-        "category": "mask-reader"
+        "title": "mask-read: 上一章",
+        "category": "mask-read"
       },
       {
         "command": "consoleReader.closeBook",
-        "title": "mask-reader: 关闭当前书籍",
-        "category": "mask-reader"
+        "title": "mask-read: 关闭当前书籍",
+        "category": "mask-read"
       }
     ],
     "viewsContainers": {
       "activitybar": [
         {
           "id": "consoleReader",
-          "title": "mask-reader",
+          "title": "mask-read",
           "icon": "resources/book.svg"
         }
       ]
@@ -104,13 +104,13 @@
           "id": "consoleReader.bookshelf",
           "name": "书架",
           "icon": "resources/book.svg",
-          "contextualTitle": "mask-reader 书架"
+          "contextualTitle": "mask-read 书架"
         },
         {
           "id": "consoleReader.chapters",
           "name": "章节目录",
           "icon": "resources/book.svg",
-          "contextualTitle": "mask-reader 章节目录"
+          "contextualTitle": "mask-read 章节目录"
         }
       ]
     },
@@ -178,7 +178,7 @@
       }
     ],
     "configuration": {
-      "title": "mask-reader",
+      "title": "mask-read",
       "properties": {
         "consoleReader.textEncoding": {
           "type": "string",

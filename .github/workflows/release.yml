@@ -48,6 +48,6 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           RELEASE_TAG: ${{ inputs.release_tag }}
         run: |
-          gh release create "$RELEASE_TAG" mask-reader-*.vsix \
-            --title "mask-reader $RELEASE_TAG" \
+          gh release create "$RELEASE_TAG" mask-read-*.vsix \
+            --title "mask-read $RELEASE_TAG" \
             --generate-notes
