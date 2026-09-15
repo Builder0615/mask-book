@@ -8,3 +8,21 @@ tsconfig.json
 *.vsix
 README.md
 node_modules/.cache/
+
+# Development-only files are not needed by the installed extension.
+**/*.map
+node_modules/**/*.d.ts
+node_modules/**/test/
+node_modules/**/tests/
+node_modules/**/__tests__/
+node_modules/**/.github/
+node_modules/**/.idea/
+node_modules/**/.vscode/
+node_modules/**/dist/
+
+# pdf-parse ships several PDF.js versions and browser assets. The extension
+# uses v1.10.100 with workers disabled, so keep only its main PDF.js runtime.
+node_modules/pdf-parse/lib/pdf.js/v1.9.426/
+node_modules/pdf-parse/lib/pdf.js/v1.10.88/
+node_modules/pdf-parse/lib/pdf.js/v2.0.550/
+node_modules/pdf-parse/lib/pdf.js/*/web/
