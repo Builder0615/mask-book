@@ -20,6 +20,20 @@ node_modules/**/.idea/
 node_modules/**/.vscode/
 node_modules/**/dist/
 
+# jsonpath-plus exposes its Node.js CommonJS entrypoint from dist/.
+!node_modules/jsonpath-plus/dist/
+!node_modules/jsonpath-plus/dist/**
+
+# Cheerio's HTML parser uses these CommonJS bundles at runtime.
+!node_modules/parse5/dist/
+!node_modules/parse5/dist/**
+!node_modules/parse5-htmlparser2-tree-adapter/dist/
+!node_modules/parse5-htmlparser2-tree-adapter/dist/**
+
+# parse5 bundles its own entities runtime under node_modules/.
+!node_modules/parse5/node_modules/entities/dist/
+!node_modules/parse5/node_modules/entities/dist/**
+
 # pdf-parse ships several PDF.js versions and browser assets. The extension
 # uses v1.10.100 with workers disabled, so keep only its main PDF.js runtime.
 node_modules/pdf-parse/lib/pdf.js/v1.9.426/

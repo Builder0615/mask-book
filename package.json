@@ -1,7 +1,7 @@
 {
   "name": "mask-read",
-  "description": "在 VS Code 底部状态栏显示 TXT、EPUB、FB2、PDF、HTML、Markdown 等常见书籍格式的当前阅读内容。",
-  "version": "0.1.3",
+  "description": "在 VS Code 底部状态栏阅读本地书籍，并通过 Legado 书源搜索在线书籍。",
+  "version": "0.2.1",
   "publisher": "builder0615",
   "license": "MIT",
   "repository": {
@@ -25,6 +25,8 @@
     "txt",
     "book",
     "novel",
+    "online-book",
+    "legado",
     "fb2",
     "pdf",
     "docx",
@@ -35,56 +37,169 @@
     "onStartupFinished",
     "onView:consoleReader.chapters",
     "onView:consoleReader.bookshelf",
-    "onCommand:consoleReader.addBook",
-    "onCommand:consoleReader.removeFromShelf",
-    "onCommand:consoleReader.toggleLine",
-    "onCommand:consoleReader.moveLineUp",
-    "onCommand:consoleReader.moveLineDown",
-    "onCommand:consoleReader.nextChapter",
-    "onCommand:consoleReader.previousChapter",
-    "onCommand:consoleReader.closeBook"
+    "onView:consoleReader.sources",
+    "onCommand:maskRead.add",
+    "onCommand:maskRead.addBook",
+    "onCommand:maskRead.addBookSource",
+    "onCommand:maskRead.addSourceSubscription",
+    "onCommand:maskRead.manageSourceSubscriptions",
+    "onCommand:maskRead.refreshSourceSubscriptions",
+    "onCommand:maskRead.refreshSourceTree",
+    "onCommand:maskRead.openSourceUrl",
+    "onCommand:maskRead.toggleBookSource",
+    "onCommand:maskRead.removeBookSource",
+    "onCommand:maskRead.refreshSourceSubscription",
+    "onCommand:maskRead.renameSourceSubscription",
+    "onCommand:maskRead.deleteSourceSubscription",
+    "onCommand:maskRead.selectAllSources",
+    "onCommand:maskRead.deleteSelectedSources",
+    "onCommand:maskRead.importBookSources",
+    "onCommand:maskRead.searchOnlineBook",
+    "onCommand:maskRead.openOnlineBook",
+    "onCommand:maskRead.removeFromShelf",
+    "onCommand:maskRead.toggleLine",
+    "onCommand:maskRead.moveLineUp",
+    "onCommand:maskRead.moveLineDown",
+    "onCommand:maskRead.nextChapter",
+    "onCommand:maskRead.previousChapter",
+    "onCommand:maskRead.closeBook"
   ],
   "contributes": {
     "commands": [
       {
-        "command": "consoleReader.addBook",
-        "title": "添加书籍",
+        "command": "maskRead.add",
+        "title": "添加",
         "category": "mask-read",
         "icon": "$(add)"
       },
       {
-        "command": "consoleReader.removeFromShelf",
+        "command": "maskRead.addBook",
+        "title": "添加本地书籍",
+        "category": "mask-read",
+        "icon": "$(add)"
+      },
+      {
+        "command": "maskRead.addBookSource",
+        "title": "导入 Legado 书源",
+        "category": "mask-read",
+        "icon": "$(file-code)"
+      },
+      {
+        "command": "maskRead.addSourceSubscription",
+        "title": "导入 Legado 订阅源",
+        "category": "mask-read",
+        "icon": "$(rss)"
+      },
+      {
+        "command": "maskRead.manageSourceSubscriptions",
+        "title": "管理 Legado 订阅源",
+        "category": "mask-read",
+        "icon": "$(settings-gear)"
+      },
+      {
+        "command": "maskRead.refreshSourceSubscriptions",
+        "title": "刷新 Legado 订阅源",
+        "category": "mask-read",
+        "icon": "$(sync)"
+      },
+      {
+        "command": "maskRead.refreshSourceTree",
+        "title": "刷新书源面板",
+        "category": "mask-read",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "maskRead.openSourceUrl",
+        "title": "打开源地址",
+        "category": "mask-read"
+      },
+      {
+        "command": "maskRead.toggleBookSource",
+        "title": "启用/停用书源",
+        "category": "mask-read",
+        "icon": "$(circle-slash)"
+      },
+      {
+        "command": "maskRead.removeBookSource",
+        "title": "移除书源",
+        "category": "mask-read",
+        "icon": "$(trash)"
+      },
+      {
+        "command": "maskRead.refreshSourceSubscription",
+        "title": "刷新此订阅源",
+        "category": "mask-read",
+        "icon": "$(sync)"
+      },
+      {
+        "command": "maskRead.renameSourceSubscription",
+        "title": "重命名订阅源",
+        "category": "mask-read",
+        "icon": "$(edit)"
+      },
+      {
+        "command": "maskRead.deleteSourceSubscription",
+        "title": "删除订阅源",
+        "category": "mask-read",
+        "icon": "$(trash)"
+      },
+      {
+        "command": "maskRead.selectAllSources",
+        "title": "全选书源",
+        "category": "mask-read",
+        "icon": "$(check-all)"
+      },
+      {
+        "command": "maskRead.deleteSelectedSources",
+        "title": "删除选中源",
+        "category": "mask-read",
+        "icon": "$(trash)"
+      },
+      {
+        "command": "maskRead.importBookSources",
+        "title": "导入 Legado 书源",
+        "category": "mask-read",
+        "icon": "$(cloud-download)"
+      },
+      {
+        "command": "maskRead.searchOnlineBook",
+        "title": "搜索在线书籍",
+        "category": "mask-read",
+        "icon": "$(search)"
+      },
+      {
+        "command": "maskRead.removeFromShelf",
         "title": "从书架移除",
         "category": "mask-read",
         "icon": "$(trash)"
       },
       {
-        "command": "consoleReader.toggleLine",
-        "title": "mask-read: 显示/隐藏状态栏阅读行",
+        "command": "maskRead.toggleLine",
+        "title": "mask-read: 显示/隐藏状态栏阅读行（快捷键可在设置中自定义）",
         "category": "mask-read"
       },
       {
-        "command": "consoleReader.moveLineUp",
-        "title": "mask-read: 向上翻行",
+        "command": "maskRead.moveLineUp",
+        "title": "mask-read: 上一行（快捷键可在设置中自定义）",
         "category": "mask-read"
       },
       {
-        "command": "consoleReader.moveLineDown",
-        "title": "mask-read: 向下翻行",
+        "command": "maskRead.moveLineDown",
+        "title": "mask-read: 下一行（快捷键可在设置中自定义）",
         "category": "mask-read"
       },
       {
-        "command": "consoleReader.nextChapter",
-        "title": "mask-read: 下一章",
+        "command": "maskRead.nextChapter",
+        "title": "mask-read: 下一章（快捷键可在设置中自定义）",
         "category": "mask-read"
       },
       {
-        "command": "consoleReader.previousChapter",
-        "title": "mask-read: 上一章",
+        "command": "maskRead.previousChapter",
+        "title": "mask-read: 上一章（快捷键可在设置中自定义）",
         "category": "mask-read"
       },
       {
-        "command": "consoleReader.closeBook",
+        "command": "maskRead.closeBook",
         "title": "mask-read: 关闭当前书籍",
         "category": "mask-read"
       }
@@ -111,76 +226,311 @@
           "name": "章节目录",
           "icon": "resources/book.svg",
           "contextualTitle": "mask-read 章节目录"
+        },
+        {
+          "id": "consoleReader.sources",
+          "name": "书源管理",
+          "icon": "resources/book.svg",
+          "contextualTitle": "mask-read 书源管理"
         }
       ]
     },
     "viewsWelcome": [
       {
         "view": "consoleReader.bookshelf",
-        "contents": "书架为空。\n\n点击标题栏右侧的添加按钮选择书籍或目录。"
+        "contents": "书架为空。\n\n点击标题栏右侧的添加按钮选择书籍、书源或订阅源，也可以使用搜索按钮搜索在线书籍。"
       },
       {
         "view": "consoleReader.chapters",
-        "contents": "当前没有打开书籍。\n\n请先在书架标题栏点击添加按钮选择书籍或目录。\n\n支持 EPUB、FB2、PDF、DOCX、ODT、TXT、Markdown、HTML、XML、RTF、SRT、VTT、ASS、SSA 等格式。"
+        "contents": "当前没有打开书籍。\n\n请先在书架标题栏点击添加按钮选择书籍或源。\n\n支持 EPUB、FB2、PDF、DOCX、ODT、TXT、Markdown、HTML、XML、RTF、SRT、VTT、ASS、SSA 等格式。"
+      },
+      {
+        "view": "consoleReader.sources",
+        "contents": "还没有书源或订阅源。\n\n点击标题栏按钮导入书源或订阅源。"
       }
     ],
     "menus": {
       "view/title": [
         {
-          "command": "consoleReader.addBook",
+          "command": "maskRead.add",
           "when": "view == consoleReader.bookshelf",
           "group": "navigation@1"
         },
         {
-          "command": "consoleReader.closeBook",
-          "when": "(view == consoleReader.bookshelf || view == consoleReader.chapters) && consoleReader.hasBook",
+          "command": "maskRead.searchOnlineBook",
+          "when": "view == consoleReader.bookshelf",
           "group": "navigation@2"
+        },
+        {
+          "command": "maskRead.addBookSource",
+          "when": "view == consoleReader.sources",
+          "group": "navigation@1"
+        },
+        {
+          "command": "maskRead.addSourceSubscription",
+          "when": "view == consoleReader.sources",
+          "group": "navigation@2"
+        },
+        {
+          "command": "maskRead.refreshSourceSubscriptions",
+          "when": "view == consoleReader.sources",
+          "group": "navigation@3"
+        },
+        {
+          "command": "maskRead.deleteSelectedSources",
+          "when": "view == consoleReader.sources",
+          "group": "navigation@4"
         }
       ],
       "view/item/context": [
         {
-          "command": "consoleReader.removeFromShelf",
-          "when": "view == consoleReader.bookshelf && viewItem == consoleReader.book",
+          "command": "maskRead.removeFromShelf",
+          "when": "view == consoleReader.bookshelf && viewItem == maskRead.book",
           "group": "inline"
+        },
+        {
+          "command": "maskRead.toggleBookSource",
+          "when": "view == consoleReader.sources && viewItem == maskRead.bookSource",
+          "group": "inline@1"
+        },
+        {
+          "command": "maskRead.removeBookSource",
+          "when": "view == consoleReader.sources && viewItem == maskRead.bookSource",
+          "group": "inline@2"
+        },
+        {
+          "command": "maskRead.refreshSourceSubscription",
+          "when": "view == consoleReader.sources && viewItem == maskRead.sourceSubscription",
+          "group": "inline@1"
+        },
+        {
+          "command": "maskRead.renameSourceSubscription",
+          "when": "view == consoleReader.sources && viewItem == maskRead.sourceSubscription",
+          "group": "inline@2"
+        },
+        {
+          "command": "maskRead.deleteSourceSubscription",
+          "when": "view == consoleReader.sources && viewItem == maskRead.sourceSubscription",
+          "group": "inline@3"
         }
       ]
     },
     "keybindings": [
       {
-        "command": "consoleReader.toggleLine",
-        "key": "ctrl+m",
-        "mac": "cmd+m",
-        "when": "consoleReader.hasBook"
+        "command": "maskRead.moveLineUp",
+        "key": "alt+left",
+        "mac": "alt+left",
+        "when": "maskRead.hasBook && config.maskRead.shortcut.lineModifier == 'alt'"
       },
       {
-        "command": "consoleReader.previousChapter",
+        "command": "maskRead.moveLineUp",
         "key": "ctrl+left",
         "mac": "cmd+left",
-        "when": "consoleReader.hasBook"
+        "when": "maskRead.hasBook && config.maskRead.shortcut.lineModifier == 'ctrl'"
       },
       {
-        "command": "consoleReader.nextChapter",
+        "command": "maskRead.moveLineUp",
+        "key": "shift+left",
+        "mac": "shift+left",
+        "when": "maskRead.hasBook && config.maskRead.shortcut.lineModifier == 'shift'"
+      },
+      {
+        "command": "maskRead.moveLineUp",
+        "key": "ctrl+alt+left",
+        "mac": "cmd+alt+left",
+        "when": "maskRead.hasBook && config.maskRead.shortcut.lineModifier == 'ctrl+alt'"
+      },
+      {
+        "command": "maskRead.moveLineUp",
+        "key": "ctrl+shift+left",
+        "mac": "cmd+shift+left",
+        "when": "maskRead.hasBook && config.maskRead.shortcut.lineModifier == 'ctrl+shift'"
+      },
+      {
+        "command": "maskRead.moveLineUp",
+        "key": "alt+shift+left",
+        "mac": "alt+shift+left",
+        "when": "maskRead.hasBook && config.maskRead.shortcut.lineModifier == 'alt+shift'"
+      },
+      {
+        "command": "maskRead.moveLineUp",
+        "key": "ctrl+alt+shift+left",
+        "mac": "cmd+alt+shift+left",
+        "when": "maskRead.hasBook && config.maskRead.shortcut.lineModifier == 'ctrl+alt+shift'"
+      },
+      {
+        "command": "maskRead.moveLineDown",
+        "key": "alt+right",
+        "mac": "alt+right",
+        "when": "maskRead.hasBook && config.maskRead.shortcut.lineModifier == 'alt'"
+      },
+      {
+        "command": "maskRead.moveLineDown",
         "key": "ctrl+right",
         "mac": "cmd+right",
-        "when": "consoleReader.hasBook"
+        "when": "maskRead.hasBook && config.maskRead.shortcut.lineModifier == 'ctrl'"
       },
       {
-        "command": "consoleReader.moveLineUp",
+        "command": "maskRead.moveLineDown",
+        "key": "shift+right",
+        "mac": "shift+right",
+        "when": "maskRead.hasBook && config.maskRead.shortcut.lineModifier == 'shift'"
+      },
+      {
+        "command": "maskRead.moveLineDown",
+        "key": "ctrl+alt+right",
+        "mac": "cmd+alt+right",
+        "when": "maskRead.hasBook && config.maskRead.shortcut.lineModifier == 'ctrl+alt'"
+      },
+      {
+        "command": "maskRead.moveLineDown",
+        "key": "ctrl+shift+right",
+        "mac": "cmd+shift+right",
+        "when": "maskRead.hasBook && config.maskRead.shortcut.lineModifier == 'ctrl+shift'"
+      },
+      {
+        "command": "maskRead.moveLineDown",
+        "key": "alt+shift+right",
+        "mac": "alt+shift+right",
+        "when": "maskRead.hasBook && config.maskRead.shortcut.lineModifier == 'alt+shift'"
+      },
+      {
+        "command": "maskRead.moveLineDown",
+        "key": "ctrl+alt+shift+right",
+        "mac": "cmd+alt+shift+right",
+        "when": "maskRead.hasBook && config.maskRead.shortcut.lineModifier == 'ctrl+alt+shift'"
+      },
+      {
+        "command": "maskRead.previousChapter",
+        "key": "alt+up",
+        "mac": "alt+up",
+        "when": "maskRead.hasBook && config.maskRead.shortcut.chapterModifier == 'alt'"
+      },
+      {
+        "command": "maskRead.previousChapter",
         "key": "ctrl+up",
         "mac": "cmd+up",
-        "when": "consoleReader.hasBook"
+        "when": "maskRead.hasBook && config.maskRead.shortcut.chapterModifier == 'ctrl'"
       },
       {
-        "command": "consoleReader.moveLineDown",
+        "command": "maskRead.previousChapter",
+        "key": "shift+up",
+        "mac": "shift+up",
+        "when": "maskRead.hasBook && config.maskRead.shortcut.chapterModifier == 'shift'"
+      },
+      {
+        "command": "maskRead.previousChapter",
+        "key": "ctrl+alt+up",
+        "mac": "cmd+alt+up",
+        "when": "maskRead.hasBook && config.maskRead.shortcut.chapterModifier == 'ctrl+alt'"
+      },
+      {
+        "command": "maskRead.previousChapter",
+        "key": "ctrl+shift+up",
+        "mac": "cmd+shift+up",
+        "when": "maskRead.hasBook && config.maskRead.shortcut.chapterModifier == 'ctrl+shift'"
+      },
+      {
+        "command": "maskRead.previousChapter",
+        "key": "alt+shift+up",
+        "mac": "alt+shift+up",
+        "when": "maskRead.hasBook && config.maskRead.shortcut.chapterModifier == 'alt+shift'"
+      },
+      {
+        "command": "maskRead.previousChapter",
+        "key": "ctrl+alt+shift+up",
+        "mac": "cmd+alt+shift+up",
+        "when": "maskRead.hasBook && config.maskRead.shortcut.chapterModifier == 'ctrl+alt+shift'"
+      },
+      {
+        "command": "maskRead.nextChapter",
+        "key": "alt+down",
+        "mac": "alt+down",
+        "when": "maskRead.hasBook && config.maskRead.shortcut.chapterModifier == 'alt'"
+      },
+      {
+        "command": "maskRead.nextChapter",
         "key": "ctrl+down",
         "mac": "cmd+down",
-        "when": "consoleReader.hasBook"
+        "when": "maskRead.hasBook && config.maskRead.shortcut.chapterModifier == 'ctrl'"
+      },
+      {
+        "command": "maskRead.nextChapter",
+        "key": "shift+down",
+        "mac": "shift+down",
+        "when": "maskRead.hasBook && config.maskRead.shortcut.chapterModifier == 'shift'"
+      },
+      {
+        "command": "maskRead.nextChapter",
+        "key": "ctrl+alt+down",
+        "mac": "cmd+alt+down",
+        "when": "maskRead.hasBook && config.maskRead.shortcut.chapterModifier == 'ctrl+alt'"
+      },
+      {
+        "command": "maskRead.nextChapter",
+        "key": "ctrl+shift+down",
+        "mac": "cmd+shift+down",
+        "when": "maskRead.hasBook && config.maskRead.shortcut.chapterModifier == 'ctrl+shift'"
+      },
+      {
+        "command": "maskRead.nextChapter",
+        "key": "alt+shift+down",
+        "mac": "alt+shift+down",
+        "when": "maskRead.hasBook && config.maskRead.shortcut.chapterModifier == 'alt+shift'"
+      },
+      {
+        "command": "maskRead.nextChapter",
+        "key": "ctrl+alt+shift+down",
+        "mac": "cmd+alt+shift+down",
+        "when": "maskRead.hasBook && config.maskRead.shortcut.chapterModifier == 'ctrl+alt+shift'"
+      },
+      {
+        "command": "maskRead.toggleLine",
+        "key": "alt+space",
+        "mac": "alt+space",
+        "when": "maskRead.hasBook && config.maskRead.shortcut.toggleModifier == 'alt'"
+      },
+      {
+        "command": "maskRead.toggleLine",
+        "key": "ctrl+space",
+        "mac": "cmd+space",
+        "when": "maskRead.hasBook && config.maskRead.shortcut.toggleModifier == 'ctrl'"
+      },
+      {
+        "command": "maskRead.toggleLine",
+        "key": "shift+space",
+        "mac": "shift+space",
+        "when": "maskRead.hasBook && config.maskRead.shortcut.toggleModifier == 'shift'"
+      },
+      {
+        "command": "maskRead.toggleLine",
+        "key": "ctrl+alt+space",
+        "mac": "cmd+alt+space",
+        "when": "maskRead.hasBook && config.maskRead.shortcut.toggleModifier == 'ctrl+alt'"
+      },
+      {
+        "command": "maskRead.toggleLine",
+        "key": "ctrl+shift+space",
+        "mac": "cmd+shift+space",
+        "when": "maskRead.hasBook && config.maskRead.shortcut.toggleModifier == 'ctrl+shift'"
+      },
+      {
+        "command": "maskRead.toggleLine",
+        "key": "alt+shift+space",
+        "mac": "alt+shift+space",
+        "when": "maskRead.hasBook && config.maskRead.shortcut.toggleModifier == 'alt+shift'"
+      },
+      {
+        "command": "maskRead.toggleLine",
+        "key": "ctrl+alt+shift+space",
+        "mac": "cmd+alt+shift+space",
+        "when": "maskRead.hasBook && config.maskRead.shortcut.toggleModifier == 'ctrl+alt+shift'"
       }
     ],
     "configuration": {
       "title": "mask-read",
       "properties": {
-        "consoleReader.textEncoding": {
+        "maskRead.textEncoding": {
           "type": "string",
           "enum": [
             "auto",
@@ -199,19 +549,102 @@
           "default": "auto",
           "description": "TXT、Markdown 等文本文件的读取编码。"
         },
-        "consoleReader.maxRecentBooks": {
+        "maskRead.maxRecentBooks": {
           "type": "integer",
           "minimum": 1,
           "maximum": 30,
           "default": 12,
           "description": "保存的最近书籍数量，用于快速切换书籍。"
         },
-        "consoleReader.statusBarMaxLength": {
+        "maskRead.statusBarMaxLength": {
           "type": "integer",
           "minimum": 20,
           "maximum": 160,
           "default": 72,
-          "description": "状态栏单行正文的最大显示字符数。状态栏没有固定宽度，超出部分会显示省略号。"
+          "description": "状态栏每段正文的最大显示字符数。超出部分可使用配置的翻行快捷键继续查看。"
+        },
+        "maskRead.shortcut.lineModifier": {
+          "type": "string",
+          "enum": [
+            "alt",
+            "ctrl",
+            "shift",
+            "ctrl+alt",
+            "ctrl+shift",
+            "alt+shift",
+            "ctrl+alt+shift"
+          ],
+          "enumDescriptions": [
+            "Alt + 左右方向键。",
+            "Ctrl + 左右方向键（macOS 为 Command）。",
+            "Shift + 左右方向键。",
+            "Ctrl + Alt + 左右方向键（macOS 为 Command + Alt）。",
+            "Ctrl + Shift + 左右方向键（macOS 为 Command + Shift）。",
+            "Alt + Shift + 左右方向键。",
+            "Ctrl + Alt + Shift + 左右方向键（macOS 使用 Command）。"
+          ],
+          "default": "alt",
+          "description": "翻行快捷键使用的修饰键，基础按键为左/右方向键。"
+        },
+        "maskRead.shortcut.chapterModifier": {
+          "type": "string",
+          "enum": [
+            "alt",
+            "ctrl",
+            "shift",
+            "ctrl+alt",
+            "ctrl+shift",
+            "alt+shift",
+            "ctrl+alt+shift"
+          ],
+          "enumDescriptions": [
+            "Alt + 上下方向键。",
+            "Ctrl + 上下方向键（macOS 为 Command）。",
+            "Shift + 上下方向键。",
+            "Ctrl + Alt + 上下方向键（macOS 为 Command + Alt）。",
+            "Ctrl + Shift + 上下方向键（macOS 为 Command + Shift）。",
+            "Alt + Shift + 上下方向键。",
+            "Ctrl + Alt + Shift + 上下方向键（macOS 使用 Command）。"
+          ],
+          "default": "alt",
+          "description": "换章快捷键使用的修饰键，基础按键为上/下方向键。"
+        },
+        "maskRead.shortcut.toggleModifier": {
+          "type": "string",
+          "enum": [
+            "alt",
+            "ctrl",
+            "shift",
+            "ctrl+alt",
+            "ctrl+shift",
+            "alt+shift",
+            "ctrl+alt+shift"
+          ],
+          "enumDescriptions": [
+            "Alt + 空格。",
+            "Ctrl + 空格（macOS 为 Command）。",
+            "Shift + 空格。",
+            "Ctrl + Alt + 空格（macOS 为 Command + Alt）。",
+            "Ctrl + Shift + 空格（macOS 为 Command + Shift）。",
+            "Alt + Shift + 空格。",
+            "Ctrl + Alt + Shift + 空格（macOS 使用 Command）。"
+          ],
+          "default": "alt",
+          "description": "显示/隐藏阅读行快捷键使用的修饰键，基础按键为空格。"
+        },
+        "maskRead.onlineSearchMaxSources": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "default": 12,
+          "description": "一次搜索最多使用的已启用 Legado 文本书源数量。可调大以搜索更多书源。"
+        },
+        "maskRead.onlineRequestTimeoutMs": {
+          "type": "integer",
+          "minimum": 3000,
+          "maximum": 60000,
+          "default": 15000,
+          "description": "在线书源单次 HTTP 请求超时时间（毫秒）。"
         }
       }
     }
@@ -225,9 +658,12 @@
   },
   "dependencies": {
     "@xmldom/xmldom": "^0.9.12",
+    "cheerio": "1.0.0-rc.12",
     "iconv-lite": "^0.6.3",
     "jszip": "^3.10.2",
-    "pdf-parse": "1.1.1"
+    "jsonpath-plus": "^10.4.0",
+    "pdf-parse": "1.1.1",
+    "xpath": "^0.0.34"
   },
   "devDependencies": {
     "@types/iconv-lite": "^0.0.1",

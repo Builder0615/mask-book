@@ -93,7 +93,7 @@ export async function parseEpubBook(filePath: string): Promise<Book> {
 
 function parseManifest(document: Document): Map<string, ManifestItem> {
   const manifest = new Map<string, ManifestItem>();
-  const items = document.getElementsByTagName('item');
+  const items = elementsByLocalName(document, 'item');
   for (let index = 0; index < items.length; index += 1) {
     const item = items[index];
     const id = item.getAttribute('id');
@@ -115,7 +115,7 @@ function parseSpine(spine: Element | undefined, manifest: Map<string, ManifestIt
   if (!spine) {
     return [];
   }
-  const itemRefs = spine.getElementsByTagName('itemref');
+  const itemRefs = elementsByLocalName(spine, 'itemref');
   const result: ManifestItem[] = [];
   for (let index = 0; index < itemRefs.length; index += 1) {
     const itemRef = itemRefs[index];
@@ -177,7 +177,7 @@ async function parseToc(
     return toc;
   }
   const ncxDocument = parseXml(ncxSource, ncxPath);
-  const navPoints = ncxDocument.getElementsByTagName('navPoint');
+  const navPoints = elementsByLocalName(ncxDocument, 'navPoint');
   for (let index = 0; index < navPoints.length; index += 1) {
     const navPoint = navPoints[index];
     const content = firstElement(navPoint, 'content');
@@ -192,7 +192,7 @@ async function parseToc(
 }
 
 function findTocNav(document: Document): Element | undefined {
-  const navs = document.getElementsByTagName('nav');
+  const navs = elementsByLocalName(document, 'nav');
   for (let index = 0; index < navs.length; index += 1) {
     const nav = navs[index];
     const type = `${nav.getAttribute('epub:type') || ''} ${nav.getAttribute('type') || ''}`.toLowerCase();
@@ -216,15 +216,39 @@ function findHeading(document: Document): string | undefined {
 
 function findMetadata(document: Document, localName: string): string | undefined {
   const candidates = [
-    ...Array.from(document.getElementsByTagName(`dc:${localName}`)),
-    ...Array.from(document.getElementsByTagName(localName))
+    ...elementsByQualifiedName(document, `dc:${localName}`),
+    ...elementsByLocalName(document, localName)
   ];
   return candidates.map(element => element.textContent?.trim()).find(Boolean);
 }
 
 function firstElement(root: Document | Element, tagName: string): Element | undefined {
-  const elements = root.getElementsByTagName(tagName);
+  const elements = elementsByLocalName(root, tagName);
   return elements.length > 0 ? elements[0] : undefined;
+}
+
+function elementsByQualifiedName(root: Document | Element, qualifiedName: string): Element[] {
+  const elements = root.getElementsByTagName('*');
+  const result: Element[] = [];
+  for (let index = 0; index < elements.length; index += 1) {
+    if (elements[index].nodeName === qualifiedName) {
+      result.push(elements[index]);
+    }
+  }
+  return result;
+}
+
+function elementsByLocalName(root: Document | Element, localName: string): Element[] {
+  const elements = root.getElementsByTagName('*');
+  const result: Element[] = [];
+  for (let index = 0; index < elements.length; index += 1) {
+    const element = elements[index];
+    const elementLocalName = element.localName || element.nodeName.split(':').pop();
+    if (elementLocalName === localName) {
+      result.push(element);
+    }
+  }
+  return result;
 }
 
 function isReadableMarkup(mediaType: string): boolean {

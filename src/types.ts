@@ -1,10 +1,40 @@
-export type BookFormat = 'epub' | 'fb2' | 'pdf' | 'docx' | 'odt' | 'text' | 'html' | 'markdown' | 'rtf' | 'subtitle';
+export type BookFormat = 'epub' | 'fb2' | 'pdf' | 'docx' | 'odt' | 'text' | 'html' | 'markdown' | 'rtf' | 'subtitle' | 'online';
 
 export interface Chapter {
   id: string;
   title: string;
   content: string;
   source?: string;
+  remoteUrl?: string;
+  contentLoaded?: boolean;
+}
+
+export interface OnlineChapterReference {
+  id: string;
+  title: string;
+  url: string;
+  source?: string;
+}
+
+export interface OnlineBookReference {
+  id: string;
+  sourceUrl: string;
+  sourceName: string;
+  bookUrl: string;
+  tocUrl: string;
+  title: string;
+  author?: string;
+  intro?: string;
+  chapters: OnlineChapterReference[];
+  variables?: Record<string, unknown>;
+}
+
+export interface BookSourceSubscription {
+  id: string;
+  name: string;
+  url: string;
+  sourceUrls: string[];
+  updatedAt?: string;
 }
 
 export interface Book {
@@ -13,6 +43,7 @@ export interface Book {
   format: BookFormat;
   chapters: Chapter[];
   text: string;
+  online?: OnlineBookReference;
 }
 
 export type TextEncoding = 'auto' | 'utf-8' | 'gb18030' | 'utf-16le' | 'utf-16be';
